@@ -1,0 +1,74 @@
+.img_modal_c {
+    margin: 0;
+    padding: 10px 20px 0 !important;
+    border: none;
+    width: 725px !important;
+    position: static !important;
+}
+
+.close {
+	display:block;
+    cursor: pointer;
+    margin-right: -10px;
+    float: right;
+    line-heigt:13.8px;
+}
+
+.product_preview {
+	width:660px;
+}
+
+.product_right_box {
+    margin-top: 40px;
+    height:249px;
+    line-height:18px;
+    width:270px;
+    display:block;
+}
+
+ .alt_view {
+    margin-top: 20px;
+}
+
+.f_right {
+float: right;
+}
+
+.f_left {
+float: left;
+
+}
+.brand {
+	font-size:15px;
+	font-style:normal;
+	font-weight:bold;
+	display:block;
+}
+
+.fn{
+	display:inline-block;
+	font-size:11px;
+	text-align:left;
+	width:150px;
+	
+}
+
+.price_pcode {
+text-align: right;
+font-size:11px;
+margin-bottom: 14px;
+}
+.prices {
+font-size: 15px;
+color: #000;
+font-family: Arial, Sans-Serif!important;
+font-weight: bold;
+display:block;
+}
+p{
+	font-size: 11px;
+font-weight: normal;
+line-height: 18px;
+margin-bottom: 9px;
+	
+}

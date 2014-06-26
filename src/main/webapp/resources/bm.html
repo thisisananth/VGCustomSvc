@@ -1,0 +1,440 @@
+
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="css/video-js.css" />
+   <link href="css/videojs-overlay.css" rel="stylesheet">
+   <script type="text/javascript">
+
+  function resumeVideo(){
+
+    var olayform = document.getElementById('main');
+    olayform.parentNode.removeChild(olayform);
+    $('#overlay').css('display','none');
+	$('#overlay-looks').css('display','none');
+   
+    var player=videojs('vid1');
+    player.play();
+    return false;
+
+
+  }
+  
+  function showProductDetails(prodId){
+	  
+	  var dataURL = prodId+'.html';
+	  var jqxhr = $.get( dataURL, function() {
+			//console.log( "success" );
+		})
+		.done(function(data) {
+			//console.log('loaded data:'+data);
+			if($('#main')){
+				$('#main').remove();
+			}
+			$('#overlay').append(data);
+		})
+		.fail(function() {
+			//console.log( "error" );
+		})
+		.always(function() {
+			//console.log( "complete" );
+		});
+	  
+  }
+
+  </script>
+  <style type="text/css">
+
+  
+  
+  .video-js{
+  margin:0px auto;
+  margin-top:0px;
+  }
+  
+  
+  </style>
+</head>
+<body>
+  <video id="vid1"   src="" class="video-js vjs-default-skin" controls  preload="auto" width="854" height="480"  >
+   <source src="https://s3-us-west-2.amazonaws.com/mediaorigin/BridalMakeup.mp4" type="video/mp4">
+  
+  </video>
+  <div id="overlay" style="width:765px;height:468px;left:247.5px;top:10px;display:none;z-index:3000;background:#fff;position:absolute">
+  
+  <div id="overlay-looks" style="display:none;position:absolute;top:330px">
+  <ul style="width: 400px; left: 0px;">
+		</ul></div>
+  </div>
+  
+  
+  <script src="js/video.dev.js"></script>
+  <script src="js/vjs.youtube.js"></script>
+  <script
+		src="js/jquery.min.js"></script>
+	
+  <script>
+
+  var positions= new Array();
+
+function addClickHandler(el, player) {
+  el.addEventListener('click', function(e) {
+   //console.log('this:'+this.id);
+   //console.log('curr time:'+player.currentTime());
+	var currsec = parseFloat(player.currentTime());
+   player.pause();
+   var dataURL="prod1.html";
+
+   if(currsec < 25){
+	   
+  	dataURL="prod1.html";
+	  
+    }else if(currsec<41){
+    	dataURL="prod2.html";
+  	 
+  	
+    }else if(currsec < 51){
+    	dataURL="prod3.html";
+    }else{
+    	dataURL="prod4.html";
+    }
+   
+   
+   
+   var jqxhr = $.get( dataURL, function() {
+		//console.log( "success" );
+	})
+	.done(function(data) {
+		//console.log('loaded data:'+data);
+		if($('#main')){
+			$('#main').remove();
+		}
+		$('#overlay').append(data);
+		$('#overlay').css('display','block');
+		
+		if(currsec < 25){
+		if($('#thumb-img1').length == 0){
+			$("#overlay-looks ul").append('<li  id="thumb-img1" class="cvid-show cvid-active"><img class="thumb" onclick="showProductDetails(\'prod1\')" src="img/image1.jpg"></li>');
+			
+		}
+		}else if(currsec<41){
+			if($('#thumb-img2').length == 0){
+				$("#overlay-looks ul").append('<li  id="thumb-img2" class="cvid-show cvid-active"><img class="thumb" onclick="showProductDetails(\'prod2\')" src="img/image2.png"></li>');
+				
+			}
+	     	 
+	      	
+	    }else if(currsec < 51){
+	    	if($('#thumb-img3').length == 0){
+				$("#overlay-looks ul").append('<li  id="thumb-img3" class="cvid-show cvid-active"><img class="thumb"onclick="showProductDetails(\'prod3\')"  src="img/image3.jpg"></li>');
+				
+			}
+	    }else{
+	    	if($('#thumb-img4').length == 0){
+				$("#overlay-looks ul").append('<li  id="thumb-img4" class="cvid-show cvid-active"><img class="thumb" onclick="showProductDetails(\'prod4\')"  src="img/image4.jpg"></li>');
+				
+			}
+	    }
+		
+		
+		$('#overlay-looks').css('display','block');
+		
+		
+		
+	})
+	.fail(function() {
+		//console.log( "error" );
+	})
+	.always(function() {
+		//console.log( "complete" );
+	});
+   
+
+ }, false);
+} ;
+
+function getPosition(currentTime){
+	
+	var diff;
+	var position;
+	var currsec = parseFloat(currentTime);
+	
+	//console.log("Current time:"+currsec);
+	
+	
+	if(positions.length==0){
+		return null;
+	}else {
+		
+		//console.log(positions);
+		
+		//var positionItems = $.parseJSON(positions);
+		
+		//get the position less than currentTime
+		$.each(positions,function(){
+			//console.log("Testing with data:"+this['time']);
+			
+			
+			var timeData = parseInt(this['time']);
+			
+			//console.log("Diff"+diff);
+			
+			if(diff!=null){
+				
+				var currDiff = Math.abs(timeData - currsec);
+				//console.log("currDiff"+currDiff);
+				if(currDiff < diff){
+					
+					diff = currDiff;
+					position = this;
+				}
+				
+			}else{
+				diff = Math.abs(timeData - currsec);
+				
+				position = this;
+			}
+		
+			
+			
+			
+			
+		});
+		
+		//console.log('Final diff:'+diff);
+		
+		if(diff > 0.5){
+			return null;
+		}else{
+			return position;
+		}
+		
+	}
+}
+
+
+function updatePositions(time){
+	
+	
+	
+	
+	var url = "../positionTrack/video/2/timer?time="+time;
+	//console.log("url:"+url);
+	
+	
+	var jqxhr = $.getJSON( url, function() {
+		//console.log( "success" );
+	})
+	.done(function(data) {
+		//console.log( "second success" );
+		positions = data.positions;
+		/*if(positions.length > 0){
+			console.log(positions[0].time);
+		}*/
+		
+	})
+	.fail(function() {
+		//console.log( "error" );
+	})
+	.always(function() {
+		//console.log( "complete" );
+	});
+	
+}
+
+String.prototype.toHHMMSS = function () {
+	console.log("time parsed:"+this);
+	//var millis =  (this + "").split(".")[1];
+    var sec_num = parseInt(this, 10); 
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    var time    = hours+':'+minutes+':'+seconds;
+    
+  //  if(millis > 0 ){
+  //  	time = time + "."+millis;
+   // }
+    return time;
+}
+
+
+
+
+
+
+ videojs('vid1').ready(function() {
+//videojs('vid1').ready(function() {
+  overlayfn = function(){
+	  
+	  updatePositions("00:00:00");
+	  var nextPositionUpdate = 10;
+	  var offset =  $('#vid1').offset();
+	     console.log("offset left:"+offset.left);
+	     console.log("ofset top:"+offset.top);
+    this.on('timeupdate',function(e){
+    	
+     var el = document.getElementById('test');
+     var imgDiv = document.getElementById('imgDiv');
+    
+     var image = document.getElementById('image');
+     var imageName="";
+    
+     var player = this;
+     
+     
+     var currsec = Math.floor(parseInt(this.currentTime(),10));
+     var currentTime = parseFloat(this.currentTime());
+     
+     //console.log('Curenttime'+this.currentTime());
+     //console.log('NextpositionUpdate');
+     
+     if(currentTime >= nextPositionUpdate){
+    	 updatePositions(this.currentTime().toString().toHHMMSS());
+    	 nextPositionUpdate = currsec + 10;
+    	 
+     }
+     
+     var position = getPosition(this.currentTime());
+     
+     
+      if(!el){
+
+          // create the overlay wrapper
+           var el = document.createElement('div');
+           el.id='test';
+           el.className="vjs-overlay vjs-show";
+           
+           //border color 65,66,63
+           //color white 
+           
+           
+
+           addClickHandler(el,player);
+
+          // add the overlay to the player
+          this.el().appendChild(el);
+          
+         
+
+       }
+      
+      if(!imgDiv){
+    	  imgDiv = document.createElement('div');
+    	  imgDiv.id='imgDiv';
+    	  imgDiv.className="vjs-img-overlay";
+    	  addClickHandler(imgDiv,player);
+    	  image = document.createElement('img');
+    	  image.id = "image";
+    	  image.style.width = "130px";
+    	  image.style.height = "148px";
+    	  
+    	  
+    	 
+			imgDiv.appendChild(image);
+    	  
+          // add the overlay to the player
+          this.el().appendChild(imgDiv);
+
+          
+      }
+
+     
+          if(position){
+        	  
+        	  if(position['width']!=0){
+        		  
+        		  var left = parseInt(position['left']);
+                  var top = parseInt(position['top']);
+                  left = left - offset.left;
+                  top = top - offset.top;
+                 
+                  
+                  el.style.left = left+"px";
+                  el.style.top = top+"px"; 
+        		  
+        		  
+        	  
+        		  el.style.width = position['width']+"px";
+                  el.style.height =position['height']+"px";
+                  
+                  
+                  if(position['imageLeft']!='' && position['imageLeft']!=0){
+             		 var imgLeft = parseInt(position['imageLeft']) - offset.left;
+                	  var imgTop = parseInt(position['imageTop']) - offset.top;
+                	  imgDiv.style.left=imgLeft+"px";
+                	  imgDiv.style.top=imgTop+"px";
+                	  if(position['imageName']!=""&&position['imageName']!=imageName){
+                		  image.src="img/"+position['imageName'];
+                		  imageName = position['imageName'];
+                	  }
+                	  
+             	}
+                  
+                  
+                  
+                  if(currsec < 25){
+                	 el.innerHTML='<span class="vjs-bracket vjs-bracket-left"></span><div class="vjs-title">Facial Serum</div>'+
+                	 '<div class="cvid-hs-designer">OROGold</div><span class="vjs-bracket vjs-bracket-right"></span>'; 
+                  	 
+                	 
+                	
+                	 
+                	  
+                	  
+                  }else if(currsec<41){
+                	  el.innerHTML='<span class="vjs-bracket vjs-bracket-left"></span><div class="vjs-title">Face Primer</div>'+
+                 	 '<div class="cvid-hs-designer">Murads Primer</div><span class="vjs-bracket vjs-bracket-right"></span>'; 
+                   	 
+                	 
+                	
+                  }else if(currsec < 51){
+                	  el.innerHTML='<span class="vjs-bracket vjs-bracket-left"></span><div class="vjs-title">Eye Shadow Primer</div>'+
+                  	 '<div class="cvid-hs-designer">Urban Decay Potion</div><span class="vjs-bracket vjs-bracket-right"></span>'; 
+                    	 
+                  }else{
+                	  el.innerHTML='<span class="vjs-bracket vjs-bracket-left"></span><div class="vjs-title">Naked Palette</div>'+
+                  	 '<div class="cvid-hs-designer">Urban Decay</div><span class="vjs-bracket vjs-bracket-right"></span>'; 
+                    	 
+                  }
+                 
+                  
+                  el.style.display ="block";
+                 
+                  imgDiv.style.display="block";
+                  el.style.lineHeight = position['height']+"px";
+                  
+                  
+        		  
+        	  }else{
+        		  el.style.display =  "none";
+        		  imgDiv.style.display = "none";
+        		 
+        	  }
+        	  
+              
+        	  
+          }else{
+        	  imgDiv.style.display = "none";
+    		 
+        	  el.style.display =  "none";
+          }
+        	
+            
+
+          
+       });
+  };
+
+  videojs.plugin('overlayfn',overlayfn);
+
+     
+
+    this.overlayfn();
+  
+  });
+  </script>
+</body>
+</html>

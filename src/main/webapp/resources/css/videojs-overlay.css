@@ -1,0 +1,272 @@
+/*! videojs-overlay - v0.0.0 - 2014-4-26
+ * Copyright (c) 2014 Brightcove
+ * Licensed under the Apache-2.0 license. */
+
+/**
+ * Some handy default styles for overlays.
+ */
+.vjs-overlay,
+.vjs-overlay.vjs-overlay-top-left {
+  position: absolute;
+  /*width: 33%;*/
+  /*background-color: #646464; /*IE8 fallback */
+  /*background-color: rgba(216, 205, 205, 0.4);*/
+  background: rgba(255, 255, 255, 0);
+  
+  
+  color: rgba(74,126,187,1);
+  padding: 10px;
+  border-radius: 3px;
+  z-index: 2000;
+ 
+  font-size:14px;
+  text-align:center;
+  vertical-align:middle;
+  opacity:0;
+  transition: opacity 3s ease-in;
+  -webkit-transition:opacity 0.5s ease-in;
+  
+  
+ 
+
+  
+}
+.vjs-show{
+	opacity:1;
+}
+.vjs-img-overlay{
+	position: absolute;
+  /*width: 33%;*/
+  /*background-color: #646464; /*IE8 fallback */
+  /*background-color: rgba(216, 205, 205, 0.4);*/
+  background: rgba(255, 255, 255, 0);
+  
+  border: 1px solid white;
+  color: #fff;
+  padding: 10px;
+  border-radius: 3px;
+  z-index: 2000;
+ 
+  
+	
+}
+
+.vjs-bracket-left{
+	left:0;
+	border-right:none;
+	border-right-color:rgb(122,122,122);
+	border-left:solid 7px rgba(74,126,187,1);
+}
+
+.vjs-bracket-right{
+	right:0;
+	border-left:none;
+	border-left-color:rgb(122,122,122);
+	border-right:solid 7px rgba(74,126,187,1);
+}
+.vjs-title{
+	letter-spacing:0.25em;
+	line-height:14px;
+	
+	text-transform:uppercase;
+}
+.vjs-designer{
+	letter-spacing:0.1em;
+	font-weight:bold;
+}
+
+.vjs-bracket{
+	
+	position:absolute;
+	top:0;
+	display:block;
+	width:5px;
+	height:88px;
+	
+	border-top:solid 7px rgba(74,126,187,1);;
+	border-bottom:solid 7px rgba(74,126,187,1);;
+	border-radius:1px;
+	
+}
+
+
+
+
+
+/* overlay alignment styles */
+.vjs-overlay.vjs-overlay-top {
+  margin-left: -16.5%;
+  left: 50%;
+}
+.vjs-overlay.vjs-overlay-top-right {
+  left: auto;
+  right: 5px;
+}
+.vjs-overlay.vjs-overlay-left {
+  top: 50%;
+  margin-top: -15px;
+}
+.vjs-overlay.vjs-overlay-right {
+  left: auto;
+  right: 5px;
+  top: 50%;
+  margin-top: -15px;
+}
+.vjs-overlay.vjs-overlay-bottom {
+  margin-left: -16.5%;
+  left: 50%;
+  top: auto;
+  bottom: 4.5em;
+}
+.vjs-overlay.vjs-overlay-bottom-left {
+  bottom: 4.5em;
+  top: auto;
+  left: 5px;
+}
+.vjs-overlay.vjs-overlay-bottom-right {
+  bottom: 4.5em;
+  top: auto;
+  left: auto;
+  right: 5px;
+}
+
+/* Overlay Form Styles */
+
+#main{
+		width: 725px;
+		margin: 0 auto;
+		/*border: 1px solid red;*/
+		height: 328px;
+		padding: 10px 20px 0;
+	}
+	.close {
+	display:block;
+    cursor: pointer;
+    margin-right: -10px;
+    float: right;
+    line-heigt:13.8px;
+}
+.product-preview{
+	display: block;
+	float: right;
+	margin:40px 0px 0px 0px;
+	/*border: 1px solid blue;*/
+	width: 270px;
+	height:250px;
+
+}
+.f_left{
+	float: left;
+}
+.f_right{
+	float: right;
+}
+#product-area{
+	width:660px;
+	
+}
+
+.brand{
+	font-size:15px;
+	font-weight: bold;
+	display: block;
+	width:150px;
+	margin: 0px;
+}
+.desc{
+	font-size:11px;
+	display: inline-block;
+	line-height: 20px;
+	width:150px;
+	color: rgb(102,102,102);
+	margin:0px;
+}
+.cost{
+	font-size:15px;
+	font-weight: bold;
+	display: block;
+	margin:0px;
+	
+}
+.product-code{
+	font-size:11px;
+	display: inline-block;
+	line-height: 18px;
+	color: rgb(102,102,102);
+	margin:0px;
+}
+.productSelect{
+	position: relative;
+	clear: both;
+	border-top: 1px solid #ccc;
+	padding-top: 60px;
+}
+form{
+	margin: 0px 0px 18px 0px;
+}
+ul{
+	list-style: disc;
+	list-style-type: none;
+	display: list-item;
+	
+
+}
+#overlay-looks li{
+	border:1px solid #cecece;
+}
+.prod_selection_items{
+	font-size: 13px;
+	line-height: 1px;
+	border: 0px;
+	padding-top: 40px;
+}
+.q{
+	
+
+	font-style: normal;
+	background: #666;
+	color: white;
+	
+	display: inline-block;
+	margin:0px;
+	padding: 10px;
+	border: 0;
+
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.add_to_back_c{
+	margin:15px 0 0 0;
+	padding: 0 0 0 75px;
+	display: block;
+	widows: 195px;
+	height: 32px;
+}
+
+.black_bt{
+	padding:5px 14px 5px 14px;
+	background: #666;
+	color: white;
+}
+#overlay-looks{
+	height: 140px;
+	display: block;
+	
+	width: 725px;
+	
+	
+	background:#fff;
+}
+
+
+.thumb{
+	height: 120px;
+	width: 92px;
+}
+.cvid-show{
+	display: inline-block;
+	
+}

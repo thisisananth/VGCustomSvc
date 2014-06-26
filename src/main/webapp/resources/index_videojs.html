@@ -1,0 +1,281 @@
+
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="css/video-js.css" />
+   <link href="css/videojs-overlay.css" rel="stylesheet">
+   <script type="text/javascript">
+
+  function resumeVideo(){
+
+    var olayform = document.getElementById('olayform');
+    olayform.parentNode.removeChild(olayform);
+
+
+    var player=videojs('vid1');
+    player.play();
+    return false;
+
+
+  }
+
+  </script>
+  <style type="text/css">
+
+  form{
+    border:1px solid red;
+    width:50%; 
+    height:50%;
+    font-size:20px;
+    margin:0 auto;
+    margin-top:5em;
+    padding: 15px;
+    text-align:center;
+  }
+  
+  
+  </style>
+</head>
+<body>
+  <video id="vid1"   src="" class="video-js vjs-default-skin" controls  preload="auto" width="640" height="360"  >
+   <source src="https://s3-us-west-2.amazonaws.com/mediaorigin/MEK2.mp4" type="video/mp4">
+  
+  </video>
+  
+  <script src="js/video.dev.js"></script>
+  <script src="js/vjs.youtube.js"></script>
+  <script
+		src="js/jquery.min.js"></script>
+	
+  <script>
+
+  var positions= new Array();
+
+function addClickHandler(el, player) {
+  el.addEventListener('click', function(e) {
+   //console.log('this:'+this.id);
+   //console.log('curr time:'+player.currentTime());
+
+   player.pause();
+   var el = document.createElement('div');
+
+   el.id="olayform";
+   el.style.width ="640px";
+   el.style.height="320px";
+   el.style.backgroundColor="#fff";
+   el.style.zIndex="3000";
+   el.style.position="absolute";
+   
+   
+   el.innerHTML="<form class='form' method='POST' action='#'>"+"<label style='font-size:14px' >Do you like this video?</label><br>"+"<input type='text' name='Pref'></input><br>"+
+   "<input type='submit'  name='Submit'  onclick='return resumeVideo();' ></input>"+
+   "</form>";
+
+   player.el().appendChild(el);
+
+
+ }, false);
+} ;
+
+function getPosition(currentTime){
+	
+	var diff;
+	var position;
+	var currsec = parseFloat(currentTime);
+	
+	console.log("Current time:"+currsec);
+	
+	
+	if(positions.length==0){
+		return null;
+	}else {
+		
+		//console.log(positions);
+		
+		//var positionItems = $.parseJSON(positions);
+		
+		//get the position less than currentTime
+		$.each(positions,function(){
+			console.log("Testing with data:"+this['time']);
+			
+			
+			var timeData = parseInt(this['time']);
+			
+			console.log("Diff"+diff);
+			
+			if(diff!=null){
+				
+				var currDiff = Math.abs(timeData - currsec);
+				console.log("currDiff"+currDiff);
+				if(currDiff < diff){
+					
+					diff = currDiff;
+					position = this;
+				}
+				
+			}else{
+				diff = Math.abs(timeData - currsec);
+				
+				position = this;
+			}
+		
+			
+			
+			
+			
+		});
+		
+		console.log('Final diff:'+diff);
+		
+		if(diff > 0.5){
+			return null;
+		}else{
+			return position;
+		}
+		
+	}
+}
+
+
+function updatePositions(time){
+	
+	
+	
+	
+	var url = "../positionTrack/video/1/timer?time="+time;
+	//console.log("url:"+url);
+	
+	
+	var jqxhr = $.getJSON( url, function() {
+		//console.log( "success" );
+	})
+	.done(function(data) {
+		//console.log( "second success" );
+		positions = data.positions;
+		/*if(positions.length > 0){
+			console.log(positions[0].time);
+		}*/
+		
+	})
+	.fail(function() {
+		//console.log( "error" );
+	})
+	.always(function() {
+		//console.log( "complete" );
+	});
+	
+}
+
+String.prototype.toHHMMSS = function () {
+	console.log("time parsed:"+this);
+	//var millis =  (this + "").split(".")[1];
+    var sec_num = parseInt(this, 10); 
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    var time    = hours+':'+minutes+':'+seconds;
+    
+  //  if(millis > 0 ){
+  //  	time = time + "."+millis;
+   // }
+    return time;
+}
+
+
+
+
+
+
+ videojs('vid1').ready(function() {
+//videojs('vid1').ready(function() {
+  overlayfn = function(){
+	  
+	  updatePositions("00:00:00");
+	  var nextPositionUpdate = 10;
+    this.on('timeupdate',function(e){
+    	
+     var el = document.getElementById('test');
+     var player = this;
+     
+     
+     var currsec = Math.floor(parseInt(this.currentTime(),10));
+     var currentTime = parseFloat(this.currentTime());
+     
+     //console.log('Curenttime'+this.currentTime());
+     //console.log('NextpositionUpdate');
+     
+     if(currentTime >= nextPositionUpdate){
+    	 updatePositions(this.currentTime().toString().toHHMMSS());
+    	 nextPositionUpdate = currsec + 10;
+    	 
+     }
+     
+     var position = getPosition(this.currentTime());
+     
+     
+      if(!el){
+
+          // create the overlay wrapper
+           var el = document.createElement('div');
+           el.id='test';
+           el.className="vjs-overlay";
+           
+           //border color 65,66,63
+           //color white 
+           
+           
+
+           addClickHandler(el,player);
+
+          // add the overlay to the player
+          this.el().appendChild(el);
+          
+          var offset =  $('#vid1').offset();
+          console.log("left:"+offset.left);
+          console.log("left:"+offset.top);
+
+       }
+
+          if(position){
+        	  
+        	  if(position['width']!=0){
+        		  el.style.width = position['width']+"px";
+                  el.style.height =position['height']+"px";
+                  el.style.left = position['left']+"px";
+                  el.style.top = position['top']+"px";
+                  el.innerHTML = "Wanna style like Nag?";
+                  el.style.display ="block";
+                  el.style.lineHeight = position['height']+"px";
+                  
+                  
+        		  
+        	  }else{
+        		  el.style.display =  "none";
+        	  }
+        	  
+              
+        	  
+          }else{
+        	  
+        	  el.style.display =  "none";
+          }
+        	
+            
+
+          
+       });
+  };
+
+  videojs.plugin('overlayfn',overlayfn);
+
+     
+
+    this.overlayfn();
+  
+  });
+  </script>
+</body>
+</html>
